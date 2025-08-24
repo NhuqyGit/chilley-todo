@@ -1,4 +1,5 @@
 import React from "react";
+import "./TodoItem.css";
 
 const TodoItem = ({ todo, onChangeComplete, removeHandle }) => {
     return (
@@ -32,11 +33,16 @@ const TodoItem = ({ todo, onChangeComplete, removeHandle }) => {
                         </svg>
                     </span>
                 </label>
-                <span
-                    className={`titleTodo ${todo.completed ? "checked" : ""}`}
-                >
-                    {todo.title}
-                </span>
+                <div className="todoContent">
+                    <span
+                        className={`titleTodo ${
+                            todo.completed ? "checked" : ""
+                        }`}
+                    >
+                        {todo.title}
+                    </span>
+                    <span className="descTodo">{todo.description}</span>
+                </div>
             </div>
 
             <button onClick={() => removeHandle(todo.id)}>

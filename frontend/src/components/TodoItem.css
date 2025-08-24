@@ -1,0 +1,11 @@
+.todoContent {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    gap: 5px;
+}
+
+.descTodo {
+    font-size: small;
+    color: var(--color-one);
+}

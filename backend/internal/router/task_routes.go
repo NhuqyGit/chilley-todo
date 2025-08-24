@@ -2,7 +2,6 @@ package router
 
 import (
 	"backend/internal/handlers"
-	"backend/internal/middlewares"
 	"backend/internal/services"
 	"backend/internal/storages"
 
@@ -17,9 +16,6 @@ func RegisterTaskRoutes(rg *gin.RouterGroup) {
 
 	// Group /tasks
 	taskRoutes := rg.Group("/tasks")
-	taskRoutes.Use(
-		middlewares.CORSMiddleware(),
-	)
 
 	// CRUD routes
 	taskRoutes.GET("", taskHandler.GetAllTasksHandler)        // GET /api/tasks

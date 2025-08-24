@@ -1,8 +1,8 @@
-main{
+main {
     position: relative;
     font-size: 14px;
 }
-.main-container{
+.main-container {
     position: absolute;
     width: 100%;
     top: -250px;
@@ -10,75 +10,85 @@ main{
     justify-content: center;
     align-items: center;
 }
-.todo-form{
+.todo-form {
     width: 45%;
 }
 
-.todo-form--title{
+.todo-form--title {
     display: flex;
     justify-content: space-between;
     align-items: center;
 }
 
-.todo-form--title button{
+.todo-form--title button {
     cursor: pointer;
     border: none;
     background: none;
     position: relative;
     width: 50px;
-    height: 50px;;
+    height: 50px;
     overflow: hidden;
 }
 
-.animationOut{
+.inputTodo {
+    display: flex;
+    gap: 5px;
+    flex-direction: column;
+    width: 100%;
+}
+
+.inputTodo div {
+    height: 1px;
+    background-color: var(--color-one);
+}
+
+.animationOut {
     transform: rotate(360deg);
     /* transform: translateX(-50px); */
     left: 105% !important;
 }
 
-.animationIn{
+.animationIn {
     transform: rotate(360deg);
     left: 20% !important;
 }
 
-.sun-icon{
+.sun-icon {
     position: absolute;
     transition: all ease 1s;
     /* margin-right: 50px; */
     top: 3px;
     left: 20%;
-
 }
 
-.moon-icon{
+.moon-icon {
     position: absolute;
     transition: all ease 1s;
     /* margin-right: 50px; */
     top: 3px;
     left: 105%;
-
 }
 
-.sun-icon path, .moon-icon path{
+.sun-icon path,
+.moon-icon path {
     fill: white;
 }
 
-.title-todo span{
+.title-todo span {
     margin-right: 5px;
     font-size: 40px;
 }
 
-.todo-form--content__create{
+.todo-form--content__create {
     display: flex;
     align-items: center;
     background: var(--todobox-color);
     border-radius: 5px;
     padding: 0 10px;
-    transition: all ease .5s;
-
+    transition: all ease 0.5s;
 }
 
-.cBox{
+.cBox {
     width: 30px;
     height: 30px;
     /* margin: 15px 20px 15px 10px; */
@@ -87,7 +97,7 @@ main{
     opacity: 0;
 }
 
-.cBox-cus{
+.cBox-cus {
     position: relative;
     border: solid 1px var(--color-one);
     margin: 15px 20px 15px 10px;
@@ -98,34 +108,34 @@ main{
     transition: all ease 3s;
 }
 
-.cBox-cus:hover{
-    background: linear-gradient(90deg,#57ddff,#c058f3);
+.cBox-cus:hover {
+    background: linear-gradient(90deg, #57ddff, #c058f3);
 }
 
-.cBox-cus span{
+.cBox-cus span {
     position: absolute;
     width: 22px;
     height: 22px;
-    background: linear-gradient(90deg,#57ddff,#c058f3);
+    background: linear-gradient(90deg, #57ddff, #c058f3);
     border-radius: 50%;
     top: 0;
     left: 0;
     opacity: 0;
 }
 
-.tick{
+.tick {
     position: absolute;
     top: 32%;
     left: -13%;
-}   
+}
 
-input:checked ~ .cus{
+input:checked ~ .cus {
     opacity: 1;
 }
 
-.todo-form--content__create .iPut{
+.todo-form--content__create .iPut {
     color: var(--todotext-color);
-    font-family: "Josefin Sans",sans-serif;;
+    font-family: "Josefin Sans", sans-serif;
     font-size: 18px;
     height: 30px;
     width: 100%;
@@ -135,69 +145,64 @@ input:checked ~ .cus{
     margin-top: 2px;
 }
 
-.light-text{
+.light-text {
     color: var(--text-light) !important;
 }
 
-.todo-form--content__create .iPut::placeholder{
+.todo-form--content__create .iPut::placeholder {
     color: var(--color-two);
     font-size: 16px;
 }
 
-.todo-form--content__create .iPut:focus{
+.todo-form--content__create .iPut:focus {
     outline: none;
 }
 
-
-.todo-form--content__list{
+.todo-form--content__list {
     background: var(--todobox-color);
     border-radius: 5px;
     margin-top: 15px;
     color: var(--todotext-color);
-    transition: all ease .5s;
+    transition: all ease 0.5s;
     box-shadow: 0 5px 15px 5px hsla(0, 0%, 45%, 0.1);
 }
 
-.todo-list{
+.todo-list {
     display: flex;
     justify-content: space-between;
     align-items: center;
     border-bottom: solid 1px hsla(0, 0%, 39%, 0.1);
     font-size: 18px;
-    padding: 0 10px;
-    transition: all ease .5s;
-
+    padding: 5px 10px;
+    transition: all ease 0.5s;
 }
 
-
-
-.todo-list button{
+.todo-list button {
     background: none;
     border: none;
 }
 
-.todo-list svg{
+.todo-list svg {
     width: 28px;
     cursor: pointer;
 }
 
-.form-cBox{
+.form-cBox {
     display: flex;
     align-items: center;
 }
 
-.form-cBox .titleTodo{
-    transition: all ease .5s;
+.form-cBox .titleTodo {
+    transition: all ease 0.5s;
     margin-top: 2px;
-    
 }
 
-.checked{
+.checked {
     text-decoration: line-through;
     color: var(--color-one);
 }
 
-.info-todoList{
+.info-todoList {
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
@@ -206,12 +211,12 @@ input:checked ~ .cus{
     color: var(--color-one);
 }
 
-.item-left{
-    transition: color ease .5s;
+.item-left {
+    transition: color ease 0.5s;
     margin-left: 5px;
 }
 
-.nav-list{
+.nav-list {
     list-style-type: none;
     display: flex;
     justify-content: center;
@@ -219,84 +224,82 @@ input:checked ~ .cus{
     padding: 0;
 }
 
-.nav-item button{
+.nav-item button {
     cursor: pointer;
     color: var(--color-one);
     text-decoration: none;
     margin: 5px;
     font-weight: 700;
-    transition: color ease .5s;
+    transition: color ease 0.5s;
     background: none;
     border: none;
     padding: 0;
-    font-family: "Josefin Sans",sans-serif;
+    font-family: "Josefin Sans", sans-serif;
 }
 
-.nav-item button:hover, .clearComp:hover, .item-left:hover{
+.nav-item button:hover,
+.clearComp:hover,
+.item-left:hover {
     color: var(--todotext-color);
 }
 
-.active{
+.active {
     color: var(--active) !important;
 }
 
-.clearComp{
+.clearComp {
     font-weight: 100;
-    transition: color ease .5s;
+    transition: color ease 0.5s;
     border: none;
     background: none;
     color: var(--color-one);
     padding: 0;
     margin-left: 5px;
-    font-family: "Josefin Sans",sans-serif;
-
+    font-family: "Josefin Sans", sans-serif;
 }
 
-.light-theme{
+.light-theme {
     background: white !important;
     color: var(--text-light) !important;
 }
 
-
 @media (max-width: 1024px) {
-    .todo-form{
+    .todo-form {
         width: 60%;
     }
 }
 
-@media (max-width: 768px){
-    .todo-form{
+@media (max-width: 768px) {
+    .todo-form {
         width: 70%;
     }
-    .todo-list{
+    .todo-list {
         font-size: 16px;
     }
 
-    .cBox-cus:hover{
+    .cBox-cus:hover {
         background: none;
     }
-    
 }
 
-@media (max-width: 435px){
-    .info-todoList{
+@media (max-width: 435px) {
+    .info-todoList {
         padding: 15px 15px;
         flex-direction: column;
         align-items: flex-start;
-
     }
 
-    .cBox-cus{
+    .cBox-cus {
         width: 18px;
         height: 18px;
     }
 
-    .cBox-cus span{
+    .cBox-cus span {
         width: 18px;
         height: 18px;
     }
 
-    .tick{
+    .tick {
         width: 22px !important;
         height: 7px !important;
     }

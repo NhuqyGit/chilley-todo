@@ -1,77 +1,102 @@
 import React, { useState, useEffect } from "react";
 import "./Todo.css";
 import TodoItem from "./TodoItem";
+import axios from "axios";
+
+const API_URL = "http://localhost:8080/api/tasks";
 
 const Todo = (props) => {
-    const LOCAL_STORAGE_KEY = "todolists";
     const [todoList, setTodoList] = useState([]);
-    const [title, setTodo] = useState("");
+    const [todoInput, setTodoInput] = useState({ title: "", description: "" });
     const [type, setType] = useState("All");
     const [theme, setTheme] = useState(false);
+    const [error, setError] = useState(false);
+
     useEffect(() => {
-        const todoDataLocal = localStorage.getItem(LOCAL_STORAGE_KEY);
-        if (todoDataLocal) setTodoList(JSON.parse(todoDataLocal));
+        fetchTasks();
     }, []);
 
-    useEffect(() => {
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(todoList));
-        console.log(todoList);
-    }, [todoList]);
+    const fetchTasks = async () => {
+        try {
+            const res = await axios.get(API_URL);
+            setTodoList(res.data);
+        } catch (err) {
+            console.error("Error fetching tasks:", err);
+        }
+    };
 
+    // change theme
     useEffect(() => {
         const { changeTheme } = props;
         changeTheme(theme);
-        console.log(theme);
     }, [props, theme]);
 
-    const submitHandle = (e) => {
+    // Handle create new task
+    const submitHandle = async (e) => {
         e.preventDefault();
-        if (title !== "")
-            setTodoList((pre) => [
-                ...pre,
-                { id: crypto.randomUUID(), title: title, completed: false },
-            ]);
-        setTodo("");
+        if (!todoInput.title || !todoInput.description) {
+            setError(true);
+            return;
+        }
+
+        setError(false); // clear error if valid
+
+        try {
+            const res = await axios.post(API_URL, {
+                title: todoInput.title,
+                description: todoInput.description,
+            });
+            console.log(res.data);
+            setTodoList([...todoList, res.data]);
+            setTodoInput({ title: "", description: "" });
+        } catch (err) {
+            console.error("Error creating task:", err);
+        }
     };
 
+    // Handle input change
     const onChangeHandle = (e) => {
-        setTodo(e.target.value);
-    };
-
-    const removeHandle = (id) => {
-        const newTodoList = todoList.filter((todo) => {
-            return todo.id !== id;
+        const { name, value } = e.target;
+        setTodoInput({
+            ...todoInput,
+            [name]: value,
         });
-
-        setTodoList(newTodoList);
     };
 
-    const onChangeComplete = (id, completed) => {
-        const newTodoList = todoList.map((todo) => {
-            if (todo.id === id) {
-                return { ...todo, completed };
-            }
-            return todo;
-        });
-        setTodoList(newTodoList);
+    // Handle remove task
+    const removeHandle = async (id) => {
+        try {
+            await axios.delete(`${API_URL}/${id}`);
+            setTodoList(todoList.filter((todo) => todo.id !== id));
+        } catch (err) {
+            console.error("Error deleting task:", err);
+        }
     };
 
-    const listTodoActive = todoList.filter(
-        (_todo) => _todo.completed === false
-    );
-    const listTodoCompleted = todoList.filter(
-        (_todo) => _todo.completed === true
-    );
+    // Update completed status
+    const onChangeComplete = async (id, completed) => {
+        try {
+            const res = await axios.put(`${API_URL}/${id}`, { completed });
+            setTodoList(
+                todoList.map((todo) =>
+                    todo.id === id
+                        ? { ...todo, completed: res.data.completed }
+                        : todo
+                )
+            );
+        } catch (err) {
+            console.error("Error updating task:", err);
+        }
+    };
+
+    const listTodoActive = todoList.filter((_todo) => !_todo.completed);
+    const listTodoCompleted = todoList.filter((_todo) => _todo.completed);
 
     const showListTodo = () => {
         let listToDo = [];
-        if (type === "All") {
-            listToDo = todoList;
-        } else if (type === "Active") {
-            listToDo = listTodoActive;
-        } else {
-            listToDo = listTodoCompleted;
-        }
+        if (type === "All") listToDo = todoList;
+        else if (type === "Active") listToDo = listTodoActive;
+        else listToDo = listTodoCompleted;
 
         return listToDo.map((_todo) => (
             <TodoItem
@@ -83,22 +108,30 @@ const Todo = (props) => {
         ));
     };
 
-    const handleChangeType = (t) => {
-        setType(t);
-    };
+    const handleChangeType = (t) => setType(t);
 
-    const clearCompleted = () => {
-        const newTodoList = todoList.filter((todo) => todo.completed === false);
-        setTodoList(newTodoList);
+    const clearCompleted = async () => {
+        try {
+            const completedTodos = todoList.filter((todo) => todo.completed);
+            await Promise.all(
+                completedTodos.map((todo) =>
+                    axios.delete(`${API_URL}/${todo.id}`)
+                )
+            );
+            setTodoList(todoList.filter((todo) => !todo.completed));
+        } catch (err) {
+            console.error("Error clearing completed:", err);
+        }
     };
 
     const changeTheme = `${theme === true ? "light-theme" : ""}`;
+
     return (
         <main>
             <div className="main-container">
                 <div className="todo-form">
                     <div className="todo-form--title">
-                        <h1 class="title-todo" style={{ color: "white" }}>
+                        <h1 className="title-todo" style={{ color: "white" }}>
                             <span>T</span>
                             <span>O</span>
                             <span>D</span>
@@ -172,9 +205,7 @@ const Todo = (props) => {
                     </div>
                     <div className="todo-form--content">
                         <form
-                            className={
-                                `todo-form--content__create ` + changeTheme
-                            }
+                            className={`todo-form--content__create ${changeTheme}`}
                             onSubmit={submitHandle}
                         >
                             <label className="cBox-cus">
@@ -182,28 +213,54 @@ const Todo = (props) => {
                                     className="cBox"
                                     style={{ pointerEvents: "none" }}
                                     type="checkbox"
-                                ></input>
+                                />
                             </label>
-                            <input
-                                className={`iPut ${
-                                    theme === true ? "light-text" : ""
-                                }`}
-                                placeholder="Create a new todo..."
-                                value={title}
-                                onChange={onChangeHandle}
-                            ></input>
+                            <div className="inputTodo">
+                                <input
+                                    name="title"
+                                    className={`iPut ${
+                                        theme === true ? "light-text" : ""
+                                    }`}
+                                    placeholder="Enter todo title..."
+                                    value={todoInput.title}
+                                    onChange={onChangeHandle}
+                                />
+                                <div></div>
+                                <input
+                                    name="description"
+                                    className={`iPut ${
+                                        theme === true ? "light-text" : ""
+                                    }`}
+                                    placeholder="Enter todo description..."
+                                    value={todoInput.description}
+                                    onChange={onChangeHandle}
+                                    onKeyDown={(e) => {
+                                        if (e.key === "Enter") {
+                                            e.preventDefault();
+                                            submitHandle(e);
+                                        }
+                                    }}
+                                />
+                                {error && (
+                                    <span
+                                        style={{
+                                            padding: "10px 0",
+                                            color: "red",
+                                        }}
+                                    >
+                                        Title and description are required!
+                                    </span>
+                                )}
+                            </div>
                         </form>
 
                         <div
-                            className={
-                                `todo-form--content__list ` + changeTheme
-                            }
+                            className={`todo-form--content__list ${changeTheme}`}
                         >
                             {showListTodo()}
 
                             <div className="info-todoList">
                                 <span className="item-left">
-                                    {" "}
                                     {type === "All"
                                         ? todoList.length
                                         : type === "Active"
@@ -214,7 +271,6 @@ const Todo = (props) => {
                                 <nav>
                                     <ul className="nav-list">
                                         <li className="nav-item">
-                                            {/* <Link path="/">All</Link> */}
                                             <button
                                                 className={
                                                     type === "All"
@@ -229,7 +285,6 @@ const Todo = (props) => {
                                             </button>
                                         </li>
                                         <li className="nav-item">
-                                            {/* <Link path="/">Active</Link> */}
                                             <button
                                                 className={
                                                     type === "Active"
@@ -244,7 +299,6 @@ const Todo = (props) => {
                                             </button>
                                         </li>
                                         <li className="nav-item">
-                                            {/* <Link path="/">Completed</Link> */}
                                             <button
                                                 className={
                                                     type === "Completed"
