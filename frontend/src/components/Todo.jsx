@@ -3,7 +3,7 @@ import "./Todo.css";
 import TodoItem from "./TodoItem";
 import axios from "axios";
 
-const API_URL = "http://localhost:8080/api/tasks";
+const API_URL = "https://chilley-todo.onrender.com/api/tasks";
 
 const Todo = (props) => {
     const [todoList, setTodoList] = useState([]);
