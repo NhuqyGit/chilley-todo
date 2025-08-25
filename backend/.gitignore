@@ -6,10 +6,6 @@
 .go_workspace
 .go_workspace.xml
 
-# Go modules
-/go.sum
-/go.mod
-
 # IDEs and Editors
 .vscode/
 .idea/
