@@ -6,17 +6,24 @@ import (
 	"sync"
 )
 
-type TaskStorage struct{
-	data map[int64]models.Task
-	nextID int64
-	mu sync.Mutex
+type ITaskStorage interface{
+	GetAll() ([]models.Task, error)
+	Create(task models.Task) (models.Task, error)
+	UpdateTaskStatus(id int64, completed bool) (models.Task, error)
+	DeleteTask(id int64) error
 }
 
-func NewTaskStorage() *TaskStorage {
+func NewTaskStorage() ITaskStorage {
 	return &TaskStorage{
 		data:   make(map[int64]models.Task),
 		nextID: 1,
 	}
+}
+
+type TaskStorage struct{
+	data map[int64]models.Task
+	nextID int64
+	mu sync.Mutex
 }
 
 func (s *TaskStorage) GetAll() ([]models.Task, error){

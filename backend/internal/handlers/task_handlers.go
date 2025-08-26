@@ -10,10 +10,10 @@ import (
 )
 
 type TaskHandler struct {
-	service *services.TaskService
+	service services.ITaskService
 }
 
-func NewTaskHandler(service *services.TaskService) *TaskHandler {
+func NewTaskHandler(service services.ITaskService) *TaskHandler {
 	return &TaskHandler{service: service}
 }
 

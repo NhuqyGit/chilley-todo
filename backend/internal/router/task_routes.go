@@ -1,17 +1,13 @@
 package router
 
 import (
-	"backend/internal/handlers"
-	"backend/internal/services"
-	"backend/internal/storages"
+	"backend/internal/wire"
 
 	"github.com/gin-gonic/gin"
 )
 
 func RegisterTaskRoutes(rg *gin.RouterGroup) {
-	store := storages.NewTaskStorage()
-	taskService := services.NewTaskService(store)
-	taskHandler := handlers.NewTaskHandler(taskService)
+	taskHandler := wire.InitUserHandler()
 
 
 	// Group /tasks

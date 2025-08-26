@@ -5,11 +5,18 @@ import (
 	"backend/internal/storages"
 )
 
-type TaskService struct {
-	storage *storages.TaskStorage
+type ITaskService interface{
+	GetAllTasks() ([]models.Task, error)
+	CreateTask(task models.Task) (models.Task, error)
+	UpdateTaskStatus(id int64, completed bool) (models.Task, error)
+	DeleteTask(id int64) (error)
 }
 
-func NewTaskService(storage *storages.TaskStorage) *TaskService {
+type TaskService struct {
+	storage storages.ITaskStorage
+}
+
+func NewTaskService(storage storages.ITaskStorage) ITaskService {
 	return &TaskService{storage: storage}
 }
 
